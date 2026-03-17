@@ -1,0 +1,7 @@
+services:
+  box_frontend:
+    container_name: box_frontend
+    build: "."
+    network_mode: host
+    environment:
+      VITE_PORT: ${VITE_PORT:-8008}
