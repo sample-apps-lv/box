@@ -49,7 +49,7 @@ const LiveAnalysisPage = () => {
     };
 
     let delay = 300;
-    const timers: NodeJS.Timeout[] = [];
+    const timers: ReturnType<typeof setTimeout>[] = [];
 
     // Phase 1: Components
     setPhase(1);
