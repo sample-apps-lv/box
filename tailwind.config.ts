@@ -7,12 +7,22 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1600px",
       },
     },
     extend: {
+      fontFamily: {
+        mono: ['"Geist Mono"', '"SF Mono"', 'monospace'],
+        sans: ['"Geist Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      fontSize: {
+        'hud-label': ['10px', { lineHeight: '14px', letterSpacing: '0.2em' }],
+        'hud-data': ['12px', { lineHeight: '18px' }],
+        'hud-header': ['18px', { lineHeight: '24px', letterSpacing: '0.05em' }],
+        'hud-xl': ['24px', { lineHeight: '32px', letterSpacing: '0.05em' }],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,28 +67,27 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        hud: {
+          cyan: "hsl(var(--hud-glow))",
+          amber: "hsl(var(--hud-amber))",
+          green: "hsl(var(--hud-green))",
+          red: "hsl(var(--hud-red))",
+          surface: "hsl(var(--hud-surface))",
+        },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "0px",
+        md: "0px",
+        sm: "0px",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
