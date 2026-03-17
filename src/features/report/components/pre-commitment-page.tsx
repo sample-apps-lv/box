@@ -5,7 +5,7 @@ import { HudCard } from '@/components/ui/hud-card';
 import { HudKpi } from '@/components/ui/hud-kpi';
 import { StatusBadge, SeverityBadge } from '@/components/ui/status-badge';
 import { ScoreGauge } from '@/components/ui/score-gauge';
-import { useReport } from '@/api/analysis/use-report';
+import { useReport } from '@/features/analyse/api/use-report';
 import { Button } from '@/components/ui/button';
 import { Copy, Download, FileText, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import type { BusinessModel, ComponentAnalysis } from '@/types/analysis';

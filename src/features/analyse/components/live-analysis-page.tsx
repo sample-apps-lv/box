@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { HudCard } from '@/components/ui/hud-card';
 import { StatusBadge, SeverityBadge } from '@/components/ui/status-badge';
 import { isMockMode } from '@/lib/fetch-api';
-import { getMockReport } from '@/api/analysis/use-report';
+import { getMockReport } from '@/features/analyse/api/use-report';
 import type { ComponentAnalysis, IpcRuleResult } from '@/types/analysis';
 import { Loader2 } from 'lucide-react';
 

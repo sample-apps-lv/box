@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { HudCard } from '@/components/ui/hud-card';
-import { usePipelines, usePipelineMissing, usePipelineSequence } from '@/api/pipeline/use-pipeline';
+import { usePipelines, usePipelineMissing, usePipelineSequence } from '@/features/pipeline/api/use-pipeline';
 import { Boxes } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { HudCard } from '@/components/ui/hud-card';
-import { useReport } from '@/api/analysis/use-report';
+import { useReport } from '@/features/analyse/api/use-report';
 import { Button } from '@/components/ui/button';
 import { Copy, Download, FileJson, FileText } from 'lucide-react';
 import { toast } from 'sonner';

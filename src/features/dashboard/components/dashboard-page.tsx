@@ -9,8 +9,8 @@ import {
   useDashboardProjects,
   useDashboardWatchlist,
   useDashboardIpcSummary,
-} from '@/api/dashboard/use-dashboard';
-import { useEcos } from '@/api/engineering/use-engineering';
+} from '@/features/dashboard/api/use-dashboard';
+import { useEcos } from '@/features/engineering/api/use-engineering';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, Bell, TrendingUp } from 'lucide-react';
 

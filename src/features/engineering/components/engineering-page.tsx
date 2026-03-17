@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { HudCard } from '@/components/ui/hud-card';
-import { useEcos, useBomVersions } from '@/api/engineering/use-engineering';
+import { useEcos, useBomVersions } from '@/features/engineering/api/use-engineering';
 import type { EcoStatus, EcoType } from '@/types/engineering';
 import { Settings, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';

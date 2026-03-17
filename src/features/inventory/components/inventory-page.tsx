@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { HudCard } from '@/components/ui/hud-card';
 import { HudKpi } from '@/components/ui/hud-kpi';
-import { useInventory, useInventoryCoverage, useCrossBom } from '@/api/inventory/use-inventory';
+import { useInventory, useInventoryCoverage, useCrossBom } from '@/features/inventory/api/use-inventory';
 import { Warehouse } from 'lucide-react';
 
 const InventoryPage = () => {
