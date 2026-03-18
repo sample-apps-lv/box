@@ -14,7 +14,7 @@ import {
 const APP_NAME = import.meta.env.VITE_APP_NAME || 'BOX';
 
 const navItems = [
-  { label: 'Analyse', path: '/', icon: Cpu },
+  { label: 'Analyse', path: '/analyse', icon: Cpu },
   { label: 'Dashboard', path: '/dashboard', icon: BarChart3 },
   { label: 'Inventory', path: '/inventory', icon: Warehouse },
   { label: 'Pipeline', path: '/pipeline', icon: Boxes },
@@ -27,7 +27,7 @@ export const TopNav = () => {
   const isConnected = health?.ollama === 'connected';
 
   return (
-    <header className="h-10 flex items-center border-b border-primary/10 bg-background/80 backdrop-blur-md px-4 shrink-0">
+    <header className="h-10 flex items-center border-b border-primary/10 bg-background/80 backdrop-blur-md px-4 shrink-0 w-full max-w-6xl mx-auto sticky top-0">
       <Link to="/" className="flex items-center gap-2 mr-8">
         <div className="w-5 h-5 border border-primary/60 flex items-center justify-center">
           <Activity className="w-3 h-3 text-primary" />

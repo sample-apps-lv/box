@@ -82,6 +82,9 @@ export const useDashboardIpcSummary = () =>
     queryFn: async (): Promise<IpcSummaryItem[]> => {
       if (isMockMode()) return MOCK_IPC_SUMMARY;
       const res = await fetchApi('/api/v1/dashboard/ipc-summary');
-      return res.json();
+      if(res.ok) {
+        return await res.json();
+      }
+      return []
     },
   });
