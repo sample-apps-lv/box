@@ -38,7 +38,7 @@ const PreCommitmentPage = () => {
   const tabs = ['COMPONENTS', 'IPC_COMPLIANCE', 'VERSION_UPGRADE', 'PRODUCT_HEALTH'];
 
   return (
-    <div className="p-6">
+    <div className="p-4 max-w-6xl mx-auto">
       {/* Verdict Bar */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

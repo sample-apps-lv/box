@@ -9,7 +9,7 @@ const ExportPage = () => {
   const { reportId } = useParams();
   const { data: report } = useReport(reportId || '');
 
-  if (!report) return <div className="p-6 font-mono text-primary animate-hud-pulse">LOADING...</div>;
+  if (!report) return <div className="p-4 max-w-6xl mx-auto font-mono text-primary animate-hud-pulse">LOADING...</div>;
 
   const downloadJson = (data: any, filename: string) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -22,7 +22,7 @@ const ExportPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-4 max-w-6xl mx-auto">
       <h1 className="font-mono text-hud-header text-primary mb-6">EXPORT_REPORT</h1>
 
       <div className="grid grid-cols-2 gap-4">

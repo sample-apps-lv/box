@@ -23,7 +23,7 @@ const DashboardPage = () => {
   const { data: pendingEcos } = useEcos({ status: 'PENDING' });
 
   return (
-    <div className="p-6">
+    <div className="p-4 max-w-6xl mx-auto">
       <h1 className="font-mono text-hud-header text-primary mb-6">ANALYTICS_DASHBOARD</h1>
 
       {/* KPI Row */}

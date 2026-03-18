@@ -68,7 +68,7 @@ const BomInputPage = () => {
   try { parsed = JSON.parse(json); } catch {}
 
   return (
-    <div className="p-6 max-w-6xl">
+    <div className="p-4 max-w-6xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <FileJson className="w-5 h-5 text-primary" />
         <h1 className="font-mono text-hud-header text-primary">BOM_INPUT</h1>

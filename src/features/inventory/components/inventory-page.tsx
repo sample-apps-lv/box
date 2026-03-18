@@ -12,7 +12,7 @@ const InventoryPage = () => {
   const totalValue = inventory?.reduce((sum, i) => sum + i.warehouse * i.unit_cost_usd, 0) || 0;
 
   return (
-    <div className="p-6">
+    <div className="p-4 max-w-6xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <Warehouse className="w-5 h-5 text-primary" />
         <h1 className="font-mono text-hud-header text-primary">VIRTUAL_INVENTORY</h1>
