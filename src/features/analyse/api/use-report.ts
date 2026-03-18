@@ -157,7 +157,17 @@ export const useReport = (reportId: string) =>
     queryKey: ['report', reportId],
     queryFn: async (): Promise<BOXReport> => {
       if (isMockMode()) return MOCK_REPORT;
+
+      // Check localStorage cache first (populated by SSE stream)
+      const cached = localStorage.getItem(`box_report_${reportId}`);
+      if (cached) {
+        try {
+          return JSON.parse(cached) as BOXReport;
+        } catch { /* fall through to API */ }
+      }
+
       const res = await fetchApi(`/api/v1/report/${reportId}`);
+      if (!res.ok) throw new Error(`Report fetch failed: ${res.status}`);
       return res.json();
     },
     enabled: !!reportId,

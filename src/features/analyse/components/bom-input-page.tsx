@@ -49,10 +49,18 @@ const BomInputPage = () => {
   };
 
   const handleSubmit = () => {
-    if (validate()) {
-      // Store BOM in sessionStorage for live analysis
-      sessionStorage.setItem('bom_input', json);
+    if (!validate()) return;
+
+    try {
+      const parsed = JSON.parse(json);
+      // Strip design_params if IPC check is disabled
+      if (!includeIpc) {
+        delete parsed.design_params;
+      }
+      sessionStorage.setItem('bom_input', JSON.stringify(parsed));
       navigate('/analyse/live');
+    } catch {
+      setError('PARSE_ERROR: Invalid JSON');
     }
   };
 
