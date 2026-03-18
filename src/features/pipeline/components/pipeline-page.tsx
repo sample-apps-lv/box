@@ -10,7 +10,7 @@ const PipelinePage = () => {
   const [selectedPipeline, setSelectedPipeline] = useState<string>('pipe-001');
   const { data: missing } = usePipelineMissing(selectedPipeline);
   const { data: sequence } = usePipelineSequence(selectedPipeline);
-  const [showSequence, setShowSequence] = useState(false);
+  const [showSequence, setShowSequence] = useState(true);
 
   const pipeline = pipelines?.find(p => p.id === selectedPipeline);
 
