@@ -23,11 +23,14 @@ const MOCK_REPORT: BOXReport = {
   components: [
     {
       ref: 'U1', mpn: 'STM32H743VIT6', manufacturer: 'STMicroelectronics', description: '32-bit MCU, 480MHz, 2MB Flash',
+      quantity: 1, category: 'Microcontroller',
       status: 'green', stock_available: 12400, unit_price_usd: 14.22, lead_time_weeks: 4,
       issues: [], alternatives: [], recommendation: 'Adequate stock. No action needed.', sources: ['https://www.digikey.com/stm32h743'],
+      technical_data: { max_voltage_v: 3.6, package_type: 'LQFP-100', max_junction_temp_c: 125, is_active_product: true, eol_signal: false, lifecycle_note: 'Active, no PCN found' },
     },
     {
       ref: 'U3', mpn: 'EIP-10S048', manufacturer: 'Bel Fuse', description: '48V DC-DC converter, 10A',
+      quantity: 2, category: 'Power',
       status: 'red', stock_available: 40, unit_price_usd: 38.90, lead_time_weeks: 18,
       issues: ['Stock insufficient for 500-unit run (need 500, found 40)', 'Lead time 18 weeks exceeds 12-week threshold'],
       alternatives: [{
@@ -36,10 +39,10 @@ const MOCK_REPORT: BOXReport = {
         reason: 'Same footprint, 20% higher current headroom, thermally validated',
         validation: {
           electrical: { voltage_in_compatible: true, current_rating_ok: true, derating_note: '12A vs 10A — positive headroom' },
-          mechanical: { footprint_match: 'exact', height_delta_mm: 0.2, height_clearance_ok: true, ipc7351_land_pattern_tier: 'Level A' },
+          mechanical: { footprint_match: 'exact', package_type: 'SIP-7', height_delta_mm: 0.2, height_clearance_ok: true, ipc7351_land_pattern_tier: 'Level A' },
           thermal: { thermal_headroom_c: 43, thermal_ok: true },
           ipc_impact: { land_pattern_change: false, ipc_violations_introduced: [], ipc_violations_resolved: [] },
-          reliability: { mtbf_hours: 100000, field_failure_rate_ppm: 120 },
+          reliability: { mtbf_hours: 100000, field_failure_rate_ppm: 120, data_source: 'manufacturer datasheet' },
         },
         ipc_compliant: true,
       }],
@@ -48,37 +51,44 @@ const MOCK_REPORT: BOXReport = {
     },
     {
       ref: 'C1', mpn: 'GRM188R61A106', manufacturer: 'Murata', description: '10µF 10V X5R 0603',
+      quantity: 4, category: 'Capacitor',
       status: 'green', stock_available: 85000, unit_price_usd: 0.02, lead_time_weeks: 2,
       issues: [], alternatives: [], recommendation: 'Commodity part. Ample stock.', sources: [],
     },
     {
       ref: 'U5', mpn: 'CP2102N', manufacturer: 'Silicon Labs', description: 'USB-UART Bridge IC',
+      quantity: 1, category: 'Interface',
       status: 'yellow', stock_available: 8500, unit_price_usd: 2.15, lead_time_weeks: 6,
       issues: ['EOL notice published — successor available'],
       alternatives: [], recommendation: 'Plan migration to CP2102N-A02.', sources: [],
+      technical_data: { max_voltage_v: 3.6, package_type: 'QFN-28', max_junction_temp_c: 85, is_active_product: false, eol_signal: true, lifecycle_note: 'EOL announced Q1 2026' },
     },
     {
       ref: 'U2', mpn: 'TPS54360B', manufacturer: 'Texas Instruments', description: '60V 3.5A Step-Down Converter',
+      quantity: 1, category: 'Power',
       status: 'green', stock_available: 4500, unit_price_usd: 3.85, lead_time_weeks: 3,
       issues: [], alternatives: [], recommendation: 'No issues detected.', sources: [],
     },
     {
       ref: 'R1', mpn: 'RC0603FR-0710KL', manufacturer: 'Yageo', description: '10kΩ 0603 1%',
+      quantity: 8, category: 'Resistor',
       status: 'green', stock_available: 500000, unit_price_usd: 0.001, lead_time_weeks: 1,
       issues: [], alternatives: [], recommendation: 'Commodity part.', sources: [],
     },
     {
       ref: 'Y1', mpn: 'ABM8-25.000MHZ', manufacturer: 'Abracon', description: '25MHz Crystal',
+      quantity: 1, category: 'Passive',
       status: 'green', stock_available: 12000, unit_price_usd: 0.45, lead_time_weeks: 4,
       issues: [], alternatives: [], recommendation: 'Adequate stock.', sources: [],
     },
     {
       ref: 'J1', mpn: 'USB4105-GF-A', manufacturer: 'GCT', description: 'USB-C Connector',
+      quantity: 1, category: 'Connector',
       status: 'green', stock_available: 28000, unit_price_usd: 0.68, lead_time_weeks: 3,
       issues: [], alternatives: [], recommendation: 'Adequate stock.', sources: [],
     },
   ],
-  ipc: {
+  ipc_report: {
     ipc_class_requested: 3,
     ipc_class_achieved: 2,
     ipc_compliance_score: 71,
@@ -109,20 +119,20 @@ const MOCK_REPORT: BOXReport = {
       { rule_id: 'IPC-6012-7.3', category: 'Reliability', description: 'Ionic contamination', severity: 'PASS', value_found: '0.8µg/cm²', limit: '<1.56µg/cm²', remediation: '' },
     ],
   },
-  upgrade: {
+  version_upgrade: {
     suggested_revision: 'Rev C',
     upgrade_summary: '3 of 8 components upgraded. Rev C cuts BOM cost 8.4% and lead time from 18 to 4 weeks.',
     bom_cost_usd_before: 184.50,
     bom_cost_usd_after: 169.05,
     max_lead_time_before_weeks: 18,
     max_lead_time_after_weeks: 4,
-    upgrades: [
-      { ref: 'U1', original_mpn: 'STM32H743VIT6', upgraded_mpn: 'STM32H7S3L8H6', reason: 'H7S3 series: pin-compatible successor, 2x Flash, 35% lower power', stock_available: 25000, lead_time_weeks: 2, unit_price_delta_usd: 1.50, performance_gain: '35% lower power, built-in crypto accelerator' },
-      { ref: 'U3', original_mpn: 'EIP-10S048', upgraded_mpn: 'CUI-VSK-S48-12', reason: 'Stock-validated alternative, 20% higher current headroom', stock_available: 2200, lead_time_weeks: 3, unit_price_delta_usd: -2.80, performance_gain: '20% current headroom, same footprint' },
-      { ref: 'U5', original_mpn: 'CP2102N', upgraded_mpn: 'CP2102N-A02', reason: 'Direct successor, same footprint, extended lifecycle', stock_available: 15000, lead_time_weeks: 4, unit_price_delta_usd: 0.10, performance_gain: 'Extended manufacturer support' },
+    upgraded_components: [
+      { ref: 'U1', original_mpn: 'STM32H743VIT6', upgraded_mpn: 'STM32H7S3L8H6', manufacturer: 'STMicroelectronics', reason: 'H7S3 series: pin-compatible successor, 2x Flash, 35% lower power', stock_available: 25000, lead_time_weeks: 2, unit_price_delta_usd: 1.50, performance_gain: '35% lower power, built-in crypto accelerator' },
+      { ref: 'U3', original_mpn: 'EIP-10S048', upgraded_mpn: 'CUI-VSK-S48-12', manufacturer: 'CUI Inc.', reason: 'Stock-validated alternative, 20% higher current headroom', stock_available: 2200, lead_time_weeks: 3, unit_price_delta_usd: -2.80, performance_gain: '20% current headroom, same footprint' },
+      { ref: 'U5', original_mpn: 'CP2102N', upgraded_mpn: 'CP2102N-A02', manufacturer: 'Silicon Labs', reason: 'Direct successor, same footprint, extended lifecycle', stock_available: 15000, lead_time_weeks: 4, unit_price_delta_usd: 0.10, performance_gain: 'Extended manufacturer support' },
     ],
   },
-  health: {
+  product_health: {
     health_score: 54,
     limitations_count: 2,
     compliance_gaps: 1,
@@ -133,23 +143,28 @@ const MOCK_REPORT: BOXReport = {
       { severity: 'MEDIUM', type: 'eol_risk', description: 'EOL risk: U5 (CP2102N) — end-of-life notice published by Silicon Labs', affected_components: ['CP2102N'], remediation: 'Migrate to CP2102N-A02 successor' },
     ],
     compliance_restrictions: [
-      { standard: 'RoHS 3', status: 'COMPLIANT', detail: 'All components RoHS 3 compliant', action: '' },
-      { standard: 'REACH SVHC', status: 'UNKNOWN', detail: '3 components (C4, C8, C11) have no REACH declaration on file', action: 'Request SVHC declarations from suppliers' },
-      { standard: 'CE EMC', status: 'GAP', detail: 'No EMC test report on file for current revision', action: 'Schedule EMC pre-compliance test' },
-      { standard: 'UL 62368-1', status: 'COMPLIANT', detail: 'Product safety certification current', action: '' },
-      { standard: 'IPC-A-610 Class 3', status: 'NON_COMPLIANT', detail: 'Annular ring violation blocks Class 3 certification', action: 'Fix annular ring per ECO recommendation' },
+      { standard: 'RoHS 3', status: 'COMPLIANT', detail: 'All components RoHS 3 compliant', affected_components: [], recommendation: '' },
+      { standard: 'REACH SVHC', status: 'UNKNOWN', detail: '3 components (C4, C8, C11) have no REACH declaration on file', affected_components: ['C4', 'C8', 'C11'], recommendation: 'Request SVHC declarations from suppliers' },
+      { standard: 'CE EMC', status: 'GAP', detail: 'No EMC test report on file for current revision', affected_components: [], recommendation: 'Schedule EMC pre-compliance test' },
+      { standard: 'UL 62368-1', status: 'COMPLIANT', detail: 'Product safety certification current', affected_components: [], recommendation: '' },
+      { standard: 'IPC-A-610 Class 3', status: 'NON_COMPLIANT', detail: 'Annular ring violation blocks Class 3 certification', affected_components: [], recommendation: 'Fix annular ring per ECO recommendation' },
     ],
     design_issues: [
-      { source: 'ipc', severity: 'FAIL', description: 'Annular ring 0.04mm below Class 3 minimum 0.05mm', remediation: 'Increase pad diameter by 0.02mm' },
-      { source: 'ipc', severity: 'WARN', description: '90° bend on NET_CLK_100 — signal integrity risk at >100MHz', remediation: 'Reroute with 45° miters' },
+      { source: 'ipc', rule_id: 'IPC-6012-3.1', severity: 'FAIL', description: 'Annular ring 0.04mm below Class 3 minimum 0.05mm', remediation: 'Increase pad diameter by 0.02mm' },
+      { source: 'ipc', rule_id: 'IPC-2221-6.1', severity: 'WARN', description: '90° bend on NET_CLK_100 — signal integrity risk at >100MHz', remediation: 'Reroute with 45° miters' },
     ],
-    recommendations: [
-      { priority: 1, category: 'design_fix', effort: 'low', description: 'Fix annular ring (IPC Class 3 blocker)', eco_ref: undefined },
-      { priority: 2, category: 'component_upgrade', effort: 'medium', description: 'Migrate U1 → STM32H7S3 (lifecycle improvement)', eco_ref: 'ECO-2026-004' },
-      { priority: 3, category: 'compliance', effort: 'low', description: 'Get REACH declarations for C4, C8, C11', eco_ref: 'ECO-2026-005' },
-      { priority: 4, category: 'architecture', effort: 'medium', description: 'Dual-source U3 via ECO-2026-003', eco_ref: 'ECO-2026-003' },
+    future_recommendations: [
+      { priority: 1, category: 'design_fix', effort: 'low', title: 'Fix annular ring — IPC Class 3 blocker', detail: 'Increase pad diameter by 0.02mm on 4 via positions. Required to achieve IPC Class 3.', eco_reference: null },
+      { priority: 2, category: 'component_upgrade', effort: 'medium', title: 'Migrate U1 → STM32H7S3', detail: 'Pin-compatible successor with 2x Flash and 35% lower power. Lifecycle improvement.', eco_reference: 'ECO-2026-004' },
+      { priority: 3, category: 'compliance', effort: 'low', title: 'Get REACH declarations for C4, C8, C11', detail: 'Request SVHC declarations from suppliers for 3 capacitors.', eco_reference: 'ECO-2026-005' },
+      { priority: 4, category: 'architecture', effort: 'medium', title: 'Dual-source U3 via ECO-2026-003', detail: 'Qualify CUI-VSK-S48-12 as validated second source for the 48V converter.', eco_reference: 'ECO-2026-003' },
     ],
   },
+  proposed_ecos: [
+    { eco_id: 'eco-001', eco_number: 'ECO-2026-003', type: 'SUBSTITUTION', product: 'IoT Gateway v2', bom_ref: 'U3', original_mpn: 'EIP-10S048', replacement_mpn: 'CUI-VSK-S48-12', reason: 'EIP-10S048 has 18-week lead time. CUI-VSK-S48-12 is pin-compatible with 3-week lead.', status: 'DRAFT' },
+    { eco_id: 'eco-002', eco_number: 'ECO-2026-004', type: 'COMPONENT_UPGRADE', product: 'IoT Gateway v2', bom_ref: 'U1', original_mpn: 'STM32H743VIT6', replacement_mpn: 'STM32H7S3L8H6', reason: 'Pin-compatible successor with 2x Flash and 35% lower power.', status: 'DRAFT' },
+    { eco_id: 'eco-003', eco_number: 'ECO-2026-005', type: 'COMPLIANCE_FIX', product: 'IoT Gateway v2', bom_ref: 'C4', original_mpn: '', replacement_mpn: '', reason: 'REACH SVHC declaration missing for C4, C8, C11.', status: 'DRAFT' },
+  ],
 };
 
 export const useReport = (reportId: string) =>

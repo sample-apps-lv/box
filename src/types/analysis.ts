@@ -34,12 +34,21 @@ export interface AnalysisRequest {
   design_params?: DesignParams;
 }
 
+export interface TechnicalData {
+  max_voltage_v: number;
+  package_type: string;
+  max_junction_temp_c: number;
+  is_active_product: boolean;
+  eol_signal: boolean;
+  lifecycle_note: string;
+}
+
 export interface AlternativeValidation {
   electrical: { voltage_in_compatible: boolean; current_rating_ok: boolean; derating_note: string };
-  mechanical: { footprint_match: string; height_delta_mm: number; height_clearance_ok: boolean; ipc7351_land_pattern_tier: string };
+  mechanical: { footprint_match: 'exact' | 'compatible' | 'rework_required'; package_type: string; height_delta_mm: number; height_clearance_ok: boolean; ipc7351_land_pattern_tier: string };
   thermal: { thermal_headroom_c: number; thermal_ok: boolean };
   ipc_impact: { land_pattern_change: boolean; ipc_violations_introduced: string[]; ipc_violations_resolved: string[] };
-  reliability: { mtbf_hours: number; field_failure_rate_ppm: number };
+  reliability: { mtbf_hours: number; field_failure_rate_ppm: number; data_source: string };
 }
 
 export interface AlternativePart {
@@ -62,6 +71,8 @@ export interface ComponentAnalysis {
   mpn: string;
   manufacturer?: string;
   description?: string;
+  quantity?: number;
+  category?: string;
   status: ComponentStatus;
   stock_available: number;
   unit_price_usd: number;
@@ -70,6 +81,7 @@ export interface ComponentAnalysis {
   alternatives: AlternativePart[];
   recommendation: string;
   sources: string[];
+  technical_data?: TechnicalData;
 }
 
 export interface IpcRuleResult {
@@ -97,6 +109,7 @@ export interface UpgradeComponent {
   ref: string;
   original_mpn: string;
   upgraded_mpn: string;
+  manufacturer?: string;
   reason: string;
   stock_available: number;
   lead_time_weeks: number;
@@ -111,7 +124,7 @@ export interface UpgradeResult {
   bom_cost_usd_after: number;
   max_lead_time_before_weeks: number;
   max_lead_time_after_weeks: number;
-  upgrades: UpgradeComponent[];
+  upgraded_components: UpgradeComponent[];
 }
 
 export interface HealthCheckResult {
@@ -123,7 +136,7 @@ export interface HealthCheckResult {
   limitations: HealthLimitation[];
   compliance_restrictions: ComplianceRestriction[];
   design_issues: DesignIssue[];
-  recommendations: HealthRecommendation[];
+  future_recommendations: HealthRecommendation[];
 }
 
 export interface HealthLimitation {
@@ -138,11 +151,13 @@ export interface ComplianceRestriction {
   standard: string;
   status: 'COMPLIANT' | 'NON_COMPLIANT' | 'GAP' | 'UNKNOWN';
   detail: string;
-  action: string;
+  affected_components?: string[];
+  recommendation: string;
 }
 
 export interface DesignIssue {
   source: 'ipc' | 'technical';
+  rule_id?: string;
   severity: 'PASS' | 'WARN' | 'FAIL';
   description: string;
   remediation: string;
@@ -151,9 +166,22 @@ export interface DesignIssue {
 export interface HealthRecommendation {
   priority: number;
   category: 'design_fix' | 'component_upgrade' | 'compliance' | 'architecture';
+  title: string;
+  detail: string;
   effort: 'none' | 'low' | 'medium' | 'high';
-  description: string;
-  eco_ref?: string;
+  eco_reference?: string | null;
+}
+
+export interface ProposedEco {
+  eco_id: string;
+  eco_number: string;
+  type: 'SUBSTITUTION' | 'COMPONENT_UPGRADE' | 'DESIGN_FIX' | 'COMPLIANCE_FIX';
+  product: string;
+  bom_ref: string;
+  original_mpn: string;
+  replacement_mpn: string;
+  reason: string;
+  status: string;
 }
 
 export type BusinessModel = 'FTF' | 'PTF' | 'BTS' | 'CTO' | 'BTO' | 'ETO' | 'PTS';
@@ -172,7 +200,8 @@ export interface BOXReport {
   rationale: string;
   action_items: string[];
   components: ComponentAnalysis[];
-  ipc?: IpcCheckResult;
-  upgrade?: UpgradeResult;
-  health?: HealthCheckResult;
+  ipc_report?: IpcCheckResult | null;
+  version_upgrade?: UpgradeResult | null;
+  product_health?: HealthCheckResult | null;
+  proposed_ecos?: ProposedEco[];
 }
