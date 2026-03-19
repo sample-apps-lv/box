@@ -21,9 +21,9 @@ export interface AnalysisStreamState {
   agentLogs: AgentLog[];
   ipcRules: IpcRuleResult[];
   ipcTotal: number;
-  ipcResult: BOXReport['ipc'] | null;
+  ipcResult: BOXReport['ipc_report'] | null;
   upgradeComponents: UpgradeComponent[];
-  upgradeResult: BOXReport['upgrade'] | null;
+  upgradeResult: BOXReport['version_upgrade'] | null;
   healthScore: number | null;
   report: BOXReport | null;
   error: string | null;
@@ -108,11 +108,11 @@ export const useAnalysisStream = () => {
     // Phase 2: IPC
     const ipcStart = delay + report.components.length * 400 + 500;
     timers.push(setTimeout(() => {
-      setState(prev => ({ ...prev, phase: 2, ipcTotal: report.ipc?.rules.length || 0 }));
+      setState(prev => ({ ...prev, phase: 2, ipcTotal: report.ipc_report?.rules.length || 0 }));
       addLog('—', 'ipc', 'IPC Class 3 validation initiated...');
     }, ipcStart));
 
-    report.ipc?.rules.forEach((rule, i) => {
+    report.ipc_report?.rules.forEach((rule, i) => {
       timers.push(setTimeout(() => {
         setState(prev => ({ ...prev, ipcRules: [...prev.ipcRules, rule] }));
         addLog('—', 'ipc', `${rule.rule_id}: ${rule.description} — ${rule.severity}`);
@@ -120,13 +120,13 @@ export const useAnalysisStream = () => {
     });
 
     // Phase 3: Upgrades
-    const upgradeStart = ipcStart + 200 + (report.ipc?.rules.length || 0) * 150 + 500;
+    const upgradeStart = ipcStart + 200 + (report.ipc_report?.rules.length || 0) * 150 + 500;
     timers.push(setTimeout(() => {
       setState(prev => ({ ...prev, phase: 3 }));
       addLog('—', 'version_upgrade', 'Version Upgrade Agent initiated...');
     }, upgradeStart));
 
-    report.upgrade?.upgrades.forEach((upg, i) => {
+    report.version_upgrade?.upgraded_components.forEach((upg, i) => {
       timers.push(setTimeout(() => {
         setState(prev => ({ ...prev, upgradeComponents: [...prev.upgradeComponents, upg] }));
         addLog(upg.ref, 'version_upgrade', `${upg.original_mpn} → ${upg.upgraded_mpn}: ${upg.reason}`);
@@ -134,15 +134,15 @@ export const useAnalysisStream = () => {
     });
 
     // Phase 4: Health
-    const healthStart = upgradeStart + 300 + (report.upgrade?.upgrades.length || 0) * 400 + 500;
+    const healthStart = upgradeStart + 300 + (report.version_upgrade?.upgraded_components.length || 0) * 400 + 500;
     timers.push(setTimeout(() => {
       setState(prev => ({ ...prev, phase: 4 }));
       addLog('—', 'strategic', 'Assessing product health...');
     }, healthStart));
 
     timers.push(setTimeout(() => {
-      setState(prev => ({ ...prev, healthScore: report.health?.health_score || 0 }));
-      addLog('—', 'strategic', `Health score: ${report.health?.health_score}/100`);
+      setState(prev => ({ ...prev, healthScore: report.product_health?.health_score || 0 }));
+      addLog('—', 'strategic', `Health score: ${report.product_health?.health_score}/100`);
     }, healthStart + 1000));
 
     // Phase 5: Complete
@@ -261,6 +261,7 @@ export const useAnalysisStream = () => {
                   alternatives: event.alternatives || [],
                   recommendation: event.recommendation || '',
                   sources: event.sources || [],
+                  technical_data: event.technical_data,
                 }
               : c
           ),
@@ -324,6 +325,7 @@ export const useAnalysisStream = () => {
             ref: event.ref,
             original_mpn: event.original_mpn,
             upgraded_mpn: event.upgraded_mpn,
+            manufacturer: event.manufacturer,
             reason: event.reason,
             stock_available: event.stock_available,
             lead_time_weeks: event.lead_time_weeks,
@@ -344,7 +346,7 @@ export const useAnalysisStream = () => {
             bom_cost_usd_after: event.bom_cost_usd_after,
             max_lead_time_before_weeks: event.max_lead_time_before_weeks,
             max_lead_time_after_weeks: event.max_lead_time_after_weeks,
-            upgrades: prev.upgradeComponents,
+            upgraded_components: prev.upgradeComponents,
           },
         }));
         break;
@@ -377,9 +379,10 @@ export const useAnalysisStream = () => {
           rationale: event.rationale,
           action_items: event.action_items || [],
           components: event.components || [],
-          ipc: event.ipc,
-          upgrade: event.upgrade,
-          health: event.health,
+          ipc_report: event.ipc_report,
+          version_upgrade: event.version_upgrade,
+          product_health: event.product_health,
+          proposed_ecos: event.proposed_ecos || [],
         };
         // Persist to localStorage
         localStorage.setItem(`box_report_${report.report_id}`, JSON.stringify(report));
@@ -390,7 +393,6 @@ export const useAnalysisStream = () => {
 
       case 'error':
         addLog(event.ref || '—', 'error', event.message);
-        // Mark the component as unknown if ref is present
         if (event.ref) {
           setState(prev => ({
             ...prev,

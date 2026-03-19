@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { HudCard } from '@/components/ui/hud-card';
 import { useReport } from '@/features/analyse/api/use-report';
 import { Button } from '@/components/ui/button';
-import { Copy, Download, FileJson, FileText } from 'lucide-react';
+import { Copy, Download, FileJson } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ExportPage = () => {
@@ -51,14 +51,14 @@ const ExportPage = () => {
           </Button>
         </HudCard>
 
-        {report.ipc && (
+        {report.ipc_report && (
           <HudCard title="FABRICATION_NOTE">
             <p className="font-mono text-hud-data text-muted-foreground mb-3">IPC fab note for Gerber package</p>
             <Button
               variant="outline"
               className="font-mono text-hud-label border-primary/30 text-primary hover:bg-primary/10 gap-2"
               onClick={() => {
-                navigator.clipboard.writeText(report.ipc!.fabrication_note);
+                navigator.clipboard.writeText(report.ipc_report!.fabrication_note);
                 toast.success('Fabrication note copied');
               }}
             >
@@ -67,7 +67,7 @@ const ExportPage = () => {
           </HudCard>
         )}
 
-        {report.upgrade && (
+        {report.version_upgrade && (
           <HudCard title="REV_C_BOM">
             <p className="font-mono text-hud-data text-muted-foreground mb-3">Upgraded BOM with new MPNs</p>
             <Button
@@ -76,13 +76,13 @@ const ExportPage = () => {
               onClick={() => {
                 const upgradedBom = {
                   product: report.product,
-                  revision: report.upgrade!.suggested_revision,
+                  revision: report.version_upgrade!.suggested_revision,
                   components: report.components.map(c => {
-                    const upg = report.upgrade!.upgrades.find(u => u.ref === c.ref);
+                    const upg = report.version_upgrade!.upgraded_components.find(u => u.ref === c.ref);
                     return { ref: c.ref, mpn: upg ? upg.upgraded_mpn : c.mpn };
                   }),
                 };
-                downloadJson(upgradedBom, `bom-${report.upgrade!.suggested_revision}.json`);
+                downloadJson(upgradedBom, `bom-${report.version_upgrade!.suggested_revision}.json`);
               }}
             >
               <Download className="w-3 h-3" /> EXPORT REV C BOM
@@ -90,10 +90,10 @@ const ExportPage = () => {
           </HudCard>
         )}
 
-        {report.ipc && (
+        {report.ipc_report && (
           <HudCard title="CONFORMANCE_CHECKLIST">
             <div className="space-y-1 mb-3">
-              {report.ipc.conformance_package_checklist.map((item, i) => (
+              {report.ipc_report.conformance_package_checklist.map((item, i) => (
                 <div key={i} className="font-mono text-hud-data text-foreground/70 flex items-center gap-2">
                   <span className="w-3 h-3 border border-primary/30" />
                   {item}
