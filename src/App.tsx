@@ -15,6 +15,7 @@ import PipelinePage from "@/features/pipeline/components/pipeline-page";
 import EngineeringPage from "@/features/engineering/components/engineering-page";
 import NotFound from "./pages/NotFound.tsx";
 import ContactPage from "./pages/contact-page.tsx";
+import ModelView from "./pages/model-view.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,8 @@ const App = () => (
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/engineering" element={<EngineeringPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/model-view" element={<ModelView />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>

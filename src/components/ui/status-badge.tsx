@@ -36,8 +36,8 @@ export const SeverityBadge = ({ severity, className }: SeverityBadgeProps) => {
     FAIL: { icon: '✖', cls: 'text-hud-red' },
   }[severity];
   return (
-    <span className={cn('font-mono text-hud-label', cfg.cls, className)}>
-      {cfg.icon} {severity}
+    <span className={cn('font-mono text-hud-label', cfg?.cls, className)}>
+      {cfg?.icon} {severity}
     </span>
   );
 };

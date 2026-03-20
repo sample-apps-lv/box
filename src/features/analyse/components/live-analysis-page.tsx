@@ -142,13 +142,13 @@ const LiveAnalysisPage = () => {
                         <td className="py-1.5 px-2 text-foreground/80">{comp.mpn}</td>
                         <td className="py-1.5 px-2"><StatusBadge status={comp.status} /></td>
                         <td className="py-1.5 px-2 text-right">
-                          {comp.status === 'searching' ? '—' : comp.stock_available.toLocaleString()}
+                          {comp.status === 'searching' ? '—' : comp?.stock_available?.toLocaleString()}
                         </td>
                         <td className="py-1.5 px-2 text-right">
-                          {comp.status === 'searching' ? '—' : comp.lead_time_weeks}
+                          {comp.status === 'searching' ? '—' : comp?.lead_time_weeks}
                         </td>
                         <td className="py-1.5 px-2 text-right">
-                          {comp.status === 'searching' ? '—' : `$${comp.unit_price_usd.toFixed(2)}`}
+                          {comp.status === 'searching' ? '—' : `$${comp?.unit_price_usd?.toFixed(2)}`}
                         </td>
                       </motion.tr>
                     ))}
