@@ -24,6 +24,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
+import { PricingSection } from "./pricing-section";
 
 const APP_NAME = import.meta.env.VITE_APP_NAME || "BOX";
 const APP_DESC =
@@ -518,6 +519,12 @@ const LandingPage = () => {
           </div>
         </TracingBeam>
       </section>
+
+      {/* =========================================
+          2. PRICING SECTION
+      ========================================= */}
+
+        <PricingSection />
 
       {/* Global Styles for new Custom Keyframes */}
       <style>{`

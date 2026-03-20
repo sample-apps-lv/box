@@ -114,7 +114,7 @@ const DashboardPage = () => {
           {ipcSummary && (
             <HudCard title="IPC_COMPLIANCE_OVERVIEW">
               <div className="space-y-2">
-                {ipcSummary.map((item) => (
+                {ipcSummary.recent.map((item) => (
                   <div key={item.product} className="flex items-center gap-3">
                     <span className="font-mono text-hud-data text-foreground/80 w-40 shrink-0">{item.product}</span>
                     <div className="flex-1 h-2 bg-muted relative">

@@ -39,3 +39,12 @@ export interface IpcSummaryItem {
   pass_rate: number;
   fail_count: number;
 }
+
+
+export type IpcSummary = {
+  total_reports: number;
+  avg_ipc_score: number;
+  passing: number;
+  failing: number;
+  recent: IpcSummaryItem[];
+};
